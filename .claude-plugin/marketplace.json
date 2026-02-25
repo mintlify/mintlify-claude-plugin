@@ -1,0 +1,14 @@
+{
+  "name": "mintlify",
+  "owner": {
+    "name": "Mintlify",
+    "email": "support@mintlify.com",
+    "url": "https://mintlify.com"
+  },
+  "plugins": [
+    {
+      "name": "mintlify",
+      "source": "./"
+    }
+  ]
+}
