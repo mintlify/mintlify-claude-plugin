@@ -15,10 +15,8 @@ The skill covers:
 
 ## Installation
 
-```bash
-/plugin marketplace add mintlify/mintlify-claude-plugin
-/plugin install mintlify@mintlify
-```
+1. Add the Mintlify marketplace: `/plugin marketplace add mintlify/mintlify-claude-plugin`
+1. Use the `/plugin` command to browse marketplaces and install the Mintlify plugin.
 
 ## Skills included
 
