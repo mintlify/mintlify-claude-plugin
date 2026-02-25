@@ -15,7 +15,18 @@ The skill covers:
 
 ## Installation
 
-`/plugin install https://github.com/mintlify/mintlify-claude-plugin`
+To install the skills in this repo:
+
+```
+npx skills add mintlify/mintlify-claude-plugin
+```
+
+To install as a Claude Code plugin:
+
+```
+/plugin marketplace add mintlify/mintlify-claude-plugin
+/plugin install mintlify@mintlify-marketplace
+```
 
 ## Skills included
 
