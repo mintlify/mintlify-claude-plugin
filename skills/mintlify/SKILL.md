@@ -175,13 +175,51 @@ Use `<Columns>` to arrange cards (or other content) in a grid. `cols` accepts 1-
 
 ## CLI commands
 
-- `npm i -g mint` — Install the Mintlify CLI.
-- `mint dev` — Local preview at localhost:3000.
-- `mint broken-links` — Check internal links.
-- `mint a11y` — Check for accessibility issues.
-- `mint rename` — Rename/move files and update references.
-- `mint validate` — Validate documentation builds.
-- `mint upgrade` — Upgrade from `mint.json` to `docs.json`.
+Install the CLI with `npm i -g mint`.
+
+### Local development
+
+- `mint dev` — Start local preview at localhost:3000. `--no-open` skips browser launch. `--groups <names>` mocks user groups.
+- `mint validate` — Strict build validation; exits non-zero on warnings or errors.
+- `mint export` — Export a static site zip for air-gapped deployment. `--output <file>` sets the output path (default: `export.zip`).
+
+### Content quality
+
+- `mint broken-links` — Check for broken internal links. `--check-anchors` validates `#` anchors. `--check-external` checks external URLs. `--check-snippets` checks links inside `<Snippet>` components.
+- `mint rename <from> <to>` — Rename a file and update all internal link references. `--force` skips errors.
+- `mint a11y` — Accessibility checks (alt text, color contrast). `--skip-contrast` or `--skip-alt-text` to narrow scope.
+
+### Analytics
+
+- `mint analytics stats` — KPI numbers (views, visitors, searches). Options: `--subdomain`, `--from`, `--to`, `--format` (table/plain/json/graph), `--agents`/`--humans` to filter traffic, `--page` to filter to one path.
+- `mint analytics search` — Search analytics. `--query` filters by search term substring.
+- `mint analytics feedback` — Feedback analytics. `--type` (code or page).
+- `mint analytics conversation list` — List assistant conversations.
+- `mint analytics conversation view <id>` — View a single conversation.
+- `mint analytics conversation buckets list` — List conversation category buckets.
+- `mint analytics conversation buckets view <id>` — View conversations in a bucket.
+
+### Authentication
+
+- `mint login` — Authenticate your Mintlify account.
+- `mint logout` — Log out of your account.
+- `mint status` — Show current authentication status.
+
+### Configuration
+
+- `mint config set <key> <value>` — Persist a config value. Valid keys: `subdomain`, `dateFrom`, `dateTo`.
+- `mint config get <key>` — Read a stored config value.
+- `mint config clear <key>` — Remove a stored config value.
+
+### Project setup
+
+- `mint new [directory]` — Scaffold a new Mintlify docs site. `--theme` and `--name` set initial config.
+- `mint workflow` — Add a workflow to the docs repository.
+
+### Maintenance
+
+- `mint update` — Update the CLI to the latest version.
+- `mint version` — Show installed CLI and client versions.
 
 ## Writing standards
 
