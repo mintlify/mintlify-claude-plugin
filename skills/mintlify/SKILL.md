@@ -186,7 +186,6 @@ Install the CLI with `npm i -g mint`.
 ### Content quality
 
 - `mint broken-links` — Check for broken internal links. `--check-anchors` validates `#` anchors. `--check-external` checks external URLs. `--check-snippets` checks links inside `<Snippet>` components.
-- `mint rename <from> <to>` — Rename a file and update all internal link references. `--force` skips errors.
 - `mint a11y` — Accessibility checks (alt text, color contrast). `--skip-contrast` or `--skip-alt-text` to narrow scope.
 
 ### Analytics
