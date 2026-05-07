@@ -18,6 +18,41 @@ Read these files **only when your task requires them**. They are in the `referen
 | `reference/navigation.md` | Modifying site navigation structure (groups, tabs, anchors, dropdowns, products, versions, languages, OpenAPI in nav). |
 | `reference/api-docs.md` | Setting up API documentation (OpenAPI, AsyncAPI, MDX manual API pages, extensions, playground config). |
 
+## MCP servers
+
+Two Mintlify MCP servers are available. Use them alongside the reference files in this skill.
+
+### Mintlify (docs MCP)
+
+Read-only access to Mintlify's published documentation. Use it when the reference files don't cover a specific detail, when you need an up-to-date component signature, or to verify an unfamiliar config option.
+
+Tools:
+- `search_mintlify` — Search the Mintlify knowledge base by query. Good for finding guides, examples, and API references.
+- `query_docs_filesystem_mintlify` — Browse the docs file tree (`ls`, `cat`, `grep`, `find`, etc.). Good for reading a specific docs page.
+
+### Mintlify MCP (dashboard MCP)
+
+Write access to a Mintlify project. Requires OAuth login on first use — Claude Code will open a browser window to authenticate.
+
+Use this server when the user wants to edit their Mintlify content, restructure navigation, or open a pull request. All changes happen on a branch and must be reviewed before merging.
+
+Workflow: call `checkout` first (always), then use `read`/`search`/`edit_page`/`write_page`/`list_nodes`/`create_node`/`update_node`/`move_node`/`delete_node`/`update_config` to make changes, then call `save` to open a PR (or `discard_session` to abandon).
+
+Key tools:
+- **`checkout`** — Start a session on a branch (required first call). Returns an `editorUrl` to preview changes live.
+- **`list_branches`** — List existing branches; call before `checkout` to attach to one.
+- **`read`** / **`search`** — Fetch a page's MDX or search across pages.
+- **`edit_page`** / **`write_page`** — Apply targeted edits or overwrite a page.
+- **`list_nodes`** / **`create_node`** / **`update_node`** / **`move_node`** / **`delete_node`** — Manage the navigation tree.
+- **`update_config`** — Modify `docs.json` (theme, nav roots, integrations, SEO).
+- **`diff`** — See all changes relative to `main`.
+- **`save`** — Open a PR (`mode: "pr"`) or push to the branch (`mode: "commit"`).
+- **`discard_session`** — Drop all in-session changes.
+
+<Note>
+Keep each session focused on one change. Smaller sessions produce easier-to-review PRs. Open the `editorUrl` to watch changes render live.
+</Note>
+
 ## Before you start
 
 Read the project's `docs.json` file first. It defines the site's navigation, theme, colors, and configuration.
@@ -179,21 +214,22 @@ Install the CLI with `npm i -g mint`.
 
 ### Local development
 
-- `mint dev` — Start local preview at localhost:3000. `--no-open` skips browser launch. `--groups <names>` mocks user groups.
-- `mint validate` — Strict build validation; exits non-zero on warnings or errors.
-- `mint export` — Export a static site zip for air-gapped deployment. `--output <file>` sets the output path (default: `export.zip`).
+- `mint dev` — Start local preview at localhost:3000. `--port` sets the port. `--no-open` skips browser launch. `--groups <names>` mocks user groups. `--disable-openapi` skips OpenAPI processing. `--local-schema` allows locally-hosted OpenAPI files over HTTP.
+- `mint validate` — Strict build validation; exits non-zero on warnings or errors. `--groups <names>` mocks user groups. `--disable-openapi` skips OpenAPI processing. `--local-schema` allows local OpenAPI files.
+- `mint export` — Export a static site zip for air-gapped deployment. `--output <file>` sets the output path (default: `export.zip`). `--groups <names>` includes restricted pages. `--disable-openapi` skips OpenAPI processing.
 
 ### Content quality
 
-- `mint broken-links` — Check for broken internal links. `--check-anchors` validates `#` anchors. `--check-external` checks external URLs. `--check-snippets` checks links inside `<Snippet>` components.
+- `mint broken-links` — Check for broken internal links. `--check-anchors` validates `#` anchors. `--check-external` checks external URLs. `--check-redirects` checks that redirect destinations in `docs.json` resolve. `--check-snippets` checks links inside `<Snippet>` components.
 - `mint a11y` — Accessibility checks (alt text, color contrast). `--skip-contrast` or `--skip-alt-text` to narrow scope.
+- `mint score [url]` — Score a docs site's AI/agent readiness. Checks llms.txt, MCP discoverability, robots.txt, sitemap, structured data, response latency, and more. Requires `mint login`. Defaults to your configured subdomain. `--format` accepts `table` (default), `plain`, or `json`.
 
 ### Analytics
 
-- `mint analytics stats` — KPI numbers (views, visitors, searches). Options: `--subdomain`, `--from`, `--to`, `--format` (table/plain/json/graph), `--agents`/`--humans` to filter traffic, `--page` to filter to one path.
-- `mint analytics search` — Search analytics. `--query` filters by search term substring.
-- `mint analytics feedback` — Feedback analytics. `--type` (code or page).
-- `mint analytics conversation list` — List assistant conversations.
+- `mint analytics stats` — KPI numbers (views, visitors, searches, feedback, assistant usage). Options: `--subdomain`, `--from`, `--to`, `--format` (table/plain/json/graph), `--agents`/`--humans` to filter traffic, `--page` to filter to one path.
+- `mint analytics search` — Search analytics. `--query` filters by search term substring. `--page` filters by top clicked page.
+- `mint analytics feedback` — Feedback analytics. `--type`: `page` (aggregate by page) or `code` (code snippet feedback). `--page` filters to one path.
+- `mint analytics conversation list` — List assistant conversations. `--page` filters by page referenced in sources.
 - `mint analytics conversation view <id>` — View a single conversation.
 - `mint analytics conversation buckets list` — List conversation category buckets.
 - `mint analytics conversation buckets view <id>` — View conversations in a bucket.
@@ -202,7 +238,7 @@ Install the CLI with `npm i -g mint`.
 
 - `mint login` — Authenticate your Mintlify account.
 - `mint logout` — Log out of your account.
-- `mint status` — Show current authentication status.
+- `mint status` — Show current authentication status (CLI version, email, org, subdomain).
 
 ### Configuration
 
@@ -212,13 +248,22 @@ Install the CLI with `npm i -g mint`.
 
 ### Project setup
 
-- `mint new [directory]` — Scaffold a new Mintlify docs site. `--theme` and `--name` set initial config.
+- `mint new [directory]` — Scaffold a new Mintlify docs site. `--name` and `--theme` set initial config. `--template` selects a pre-defined template. `--force` overwrites an existing directory.
 - `mint workflow` — Add a workflow to the docs repository.
 
 ### Maintenance
 
 - `mint update` — Update the CLI to the latest version.
 - `mint version` — Show installed CLI and client versions.
+
+### Coming soon
+
+These commands are registered but not yet functional. Running them records interest via telemetry.
+
+- `mint ai` — AI-powered documentation tools.
+- `mint test` — Documentation testing.
+- `mint signup` — Account sign-up from the CLI.
+- `mint mcp` — MCP server for documentation.
 
 ## Writing standards
 

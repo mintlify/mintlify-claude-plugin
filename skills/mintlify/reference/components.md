@@ -248,6 +248,8 @@ Props:
 - `required` (boolean): Required indicator.
 - `deprecated` (boolean): Deprecation flag.
 - `default` (string): Default value.
+- `pre` (string[]): Labels rendered before the field name.
+- `post` (string[]): Labels rendered after the field name.
 
 ## Request and response examples
 
@@ -470,6 +472,23 @@ Props:
 - `description` (string): Version or release name.
 - `tags` (string[]): Filterable tags.
 - `rss` (object): Custom RSS entry with `title` and `description`.
+
+## Visibility
+
+Show different content to humans (web UI) versus AI agents (Markdown output). Content marked `for="humans"` renders on the site but is excluded from `.md` URLs; content marked `for="agents"` is hidden on the site but included in Markdown output.
+
+```mdx
+<Visibility for="humans">
+  Click the **Get started** button in the top-right corner.
+</Visibility>
+
+<Visibility for="agents">
+  To create an account, call `POST /v1/accounts` with a valid email.
+</Visibility>
+```
+
+Props:
+- `for` (string, required): `"humans"` or `"agents"`.
 
 ## View
 

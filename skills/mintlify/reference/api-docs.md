@@ -111,7 +111,14 @@ Control the API playground behavior in `docs.json`:
 }
 ```
 
-- `playground.display`: `"interactive"`, `"simple"`, or `"none"`.
+- `playground.display`: `"interactive"`, `"simple"`, `"none"`, or `"auth"`.
+- `playground.proxy`: Route requests through Mintlify's proxy. Default: `true`.
+- `playground.credentials`: Include cookies and auth headers for cross-origin requests when proxy is `false`. Default: `false`.
+- `params.expanded`: Expand all parameters by default. `"all"` or `"closed"` (default).
+- `params.post`: OpenAPI schema field keys to surface as pills next to parameter names (array of strings).
+- `url`: Set to `"full"` to always show the full base URL.
 - `examples.languages`: `bash`, `go`, `java`, `javascript`, `node`, `php`, `powershell`, `python`, `ruby`, `swift`.
 - `examples.defaults`: `"required"` or `"all"` (include optional params).
+- `examples.prefill`: Pre-fill playground fields with spec example values. Default: `false`.
+- `examples.autogenerate`: Generate code samples from API specs. Default: `true`.
 - `mdx.auth.method`: `"bearer"`, `"basic"`, `"key"`, `"cobo"`.
