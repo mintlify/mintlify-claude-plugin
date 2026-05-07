@@ -3,6 +3,10 @@
     "Mintlify": {
       "type": "http",
       "url": "https://mintlify.com/docs/mcp"
+    },
+    "Mintlify MCP": {
+      "type": "http",
+      "url": "https://mcp.mintlify.com"
     }
   }
 }

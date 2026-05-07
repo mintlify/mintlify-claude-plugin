@@ -18,6 +18,41 @@ Read these files **only when your task requires them**. They are in the `referen
 | `reference/navigation.md` | Modifying site navigation structure (groups, tabs, anchors, dropdowns, products, versions, languages, OpenAPI in nav). |
 | `reference/api-docs.md` | Setting up API documentation (OpenAPI, AsyncAPI, MDX manual API pages, extensions, playground config). |
 
+## MCP servers
+
+Two Mintlify MCP servers are available. Use them alongside the reference files in this skill.
+
+### Mintlify (docs MCP)
+
+Read-only access to Mintlify's published documentation. Use it when the reference files don't cover a specific detail, when you need an up-to-date component signature, or to verify an unfamiliar config option.
+
+Tools:
+- `search_mintlify` — Search the Mintlify knowledge base by query. Good for finding guides, examples, and API references.
+- `query_docs_filesystem_mintlify` — Browse the docs file tree (`ls`, `cat`, `grep`, `find`, etc.). Good for reading a specific docs page.
+
+### Mintlify MCP (dashboard MCP)
+
+Write access to a Mintlify project. Requires OAuth login on first use — Claude Code will open a browser window to authenticate.
+
+Use this server when the user wants to edit their Mintlify content, restructure navigation, or open a pull request. All changes happen on a branch and must be reviewed before merging.
+
+Workflow: call `checkout` first (always), then use `read`/`search`/`edit_page`/`write_page`/`list_nodes`/`create_node`/`update_node`/`move_node`/`delete_node`/`update_config` to make changes, then call `save` to open a PR (or `discard_session` to abandon).
+
+Key tools:
+- **`checkout`** — Start a session on a branch (required first call). Returns an `editorUrl` to preview changes live.
+- **`list_branches`** — List existing branches; call before `checkout` to attach to one.
+- **`read`** / **`search`** — Fetch a page's MDX or search across pages.
+- **`edit_page`** / **`write_page`** — Apply targeted edits or overwrite a page.
+- **`list_nodes`** / **`create_node`** / **`update_node`** / **`move_node`** / **`delete_node`** — Manage the navigation tree.
+- **`update_config`** — Modify `docs.json` (theme, nav roots, integrations, SEO).
+- **`diff`** — See all changes relative to `main`.
+- **`save`** — Open a PR (`mode: "pr"`) or push to the branch (`mode: "commit"`).
+- **`discard_session`** — Drop all in-session changes.
+
+<Note>
+Keep each session focused on one change. Smaller sessions produce easier-to-review PRs. Open the `editorUrl` to watch changes render live.
+</Note>
+
 ## Before you start
 
 Read the project's `docs.json` file first. It defines the site's navigation, theme, colors, and configuration.
