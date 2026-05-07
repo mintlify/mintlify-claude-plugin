@@ -145,7 +145,7 @@ Single file or light/dark variants:
 }
 ```
 
-Options: `lucide` or `fontawesome`. You can only use one library per project. Individual icons can still use URLs or file paths regardless of this setting.
+Options: `"fontawesome"` (default), `"lucide"`, or `"tabler"`. You can only use one library per project. Individual icons can still use URLs or file paths regardless of this setting.
 
 ## Fonts
 
@@ -276,11 +276,38 @@ Valid social keys: `x`, `website`, `facebook`, `youtube`, `discord`, `slack`, `g
 ```json
 "banner": {
   "content": "Version 2.0 is live! [Learn more](/changelog)",
-  "dismissible": true
+  "dismissible": true,
+  "type": "info",
+  "color": {
+    "light": "#7C3AED",
+    "dark": "#5B21B6"
+  }
 }
 ```
 
-Supports basic Markdown in content (links, bold, italic). Language-specific banners can be set inside the `navigation.languages` entries.
+- `content` (required): Supports basic Markdown (links, bold, italic). Custom components are not supported.
+- `dismissible`: Show a close button. Stays hidden for a user until content changes. Default: `false`.
+- `type`: Background style. `"info"` (primary color, default), `"warning"` (amber), `"critical"` (red).
+- `color`: Custom background hex. Overrides `type`. Object with `light` and `dark` keys, or a single hex string. Banner text is white — choose a dark enough background.
+
+Language-specific banners can be set inside the `navigation.languages` entries.
+
+## Variables
+
+Global content variables substituted at build time using `{{variableName}}` syntax in MDX files.
+
+```json
+"variables": {
+  "apiVersion": "v2",
+  "baseUrl": "https://api.example.com"
+}
+```
+
+Keys must be alphanumeric with hyphens only. Values are plain strings. Use in any `.mdx` file:
+
+```mdx
+The current API version is {{apiVersion}}.
+```
 
 ## Redirects
 
@@ -340,11 +367,13 @@ Controls whether clicking a navigation group navigates to its first page (`true`
 
 ```json
 "contextual": {
-  "options": ["copy", "chatgpt", "claude", "cursor", "vscode"]
+  "options": ["copy", "chatgpt", "claude", "cursor", "vscode"],
+  "display": "header"
 }
 ```
 
-Options: `copy`, `view`, `chatgpt`, `claude`, `perplexity`, `mcp`, `cursor`, `vscode`, or custom objects.
+- `options` (required): First item is the default action. Built-in values: `"assistant"`, `"copy"`, `"view"`, `"chatgpt"`, `"claude"`, `"perplexity"`, `"grok"`, `"aistudio"`, `"devin"`, `"windsurf"`, `"mcp"`, `"add-mcp"`, `"cursor"`, `"vscode"`, `"devin-mcp"`. Custom objects accepted with `title`, `description`, `icon`, and `href` fields.
+- `display`: Where to show the menu. `"header"` (default) or `"toc"`.
 
 ## Thumbnails
 
@@ -396,9 +425,16 @@ Options: `copy`, `view`, `chatgpt`, `claude`, `perplexity`, `mcp`, `cursor`, `vs
 
 - `openapi`: Single file, array, or object with `source` and `directory`.
 - `asyncapi`: Same format as `openapi` for AsyncAPI specs.
-- `playground.display`: `"interactive"`, `"simple"`, or `"none"`.
+- `playground.display`: `"interactive"`, `"simple"`, `"none"`, or `"auth"`.
+- `playground.proxy`: Route requests through Mintlify's proxy. Default: `true`.
+- `playground.credentials`: Include cookies and auth headers for cross-origin requests when proxy is `false`. Default: `false`.
+- `params.expanded`: Expand all parameters by default. `"all"` or `"closed"` (default).
+- `params.post`: OpenAPI schema field keys to surface as pills next to parameter names.
+- `url`: Set to `"full"` to always show the full base URL (default: only shown when multiple base URLs exist).
 - `examples.languages`: `bash`, `go`, `java`, `javascript`, `node`, `php`, `powershell`, `python`, `ruby`, `swift`.
 - `examples.defaults`: `"required"` or `"all"` (include optional params).
+- `examples.prefill`: Pre-fill playground fields with spec example values. Default: `false`.
+- `examples.autogenerate`: Generate code samples from API specs. Default: `true`.
 - `mdx.auth.method`: `"bearer"`, `"basic"`, `"key"`, `"cobo"`.
 
 ## Integrations

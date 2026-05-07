@@ -50,6 +50,8 @@ Group properties:
 - `tag`: Label displayed next to group name.
 - `root`: Page that opens when clicking the group title.
 - `expanded`: Default open state for nested groups (`true`/`false`). Top-level groups are always expanded.
+- `directory`: When the group has a `root` page, render a listing of child pages below the root page content. Values: `"none"` (default), `"accordion"` (collapsible list), `"card"` (horizontal cards). Inherits recursively; descendants can override.
+- `boost`: Numeric multiplier for in-product search ranking of every page in the group. Use values `> 1` to prioritize, `0–1` to de-prioritize.
 
 ## Tabs
 
@@ -217,12 +219,15 @@ Appear on all pages regardless of active section:
     "versions": [
       {
         "version": "2.0.0",
+        "default": true,
+        "tag": "Latest",
         "groups": [
           { "group": "Getting started", "pages": ["v2/overview", "v2/quickstart"] }
         ]
       },
       {
         "version": "1.0.0",
+        "tag": "Deprecated",
         "groups": [
           { "group": "Getting started", "pages": ["v1/overview", "v1/quickstart"] }
         ]
@@ -231,6 +236,11 @@ Appear on all pages regardless of active section:
   }
 }
 ```
+
+Version properties:
+- `version` (required): Version label shown in the selector.
+- `default`: Set `true` to make this the default version (otherwise the first entry is the default).
+- `tag`: Badge label displayed in the version selector dropdown (e.g., `"Latest"`, `"Recommended"`, `"Beta"`).
 
 ## Languages
 
