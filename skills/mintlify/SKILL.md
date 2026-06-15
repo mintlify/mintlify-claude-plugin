@@ -226,7 +226,7 @@ Install the CLI with `npm i -g mint`.
 
 ### Analytics
 
-- `mint analytics stats` — KPI numbers (views, visitors, searches, feedback, assistant usage). Options: `--subdomain`, `--from`, `--to`, `--format` (table/plain/json/graph), `--agents`/`--humans` to filter traffic, `--page` to filter to one path.
+- `mint analytics stats` — KPI numbers (views, visitors, searches, feedback, assistant usage). Options: `--subdomain`, `--from`, `--to`, `--format` (plain/table/json/graph; default: plain), `--page` to filter to one path.
 - `mint analytics search` — Search analytics. `--query` filters by search term substring. `--page` filters by top clicked page.
 - `mint analytics feedback` — Feedback analytics. `--type`: `page` (aggregate by page) or `code` (code snippet feedback). `--page` filters to one path.
 - `mint analytics conversation list` — List assistant conversations. `--page` filters by page referenced in sources.
@@ -249,7 +249,9 @@ Install the CLI with `npm i -g mint`.
 ### Project setup
 
 - `mint new [directory]` — Scaffold a new Mintlify docs site. `--name` and `--theme` set initial config. `--template` selects a pre-defined template. `--force` overwrites an existing directory.
-- `mint workflow` — Add a workflow to the docs repository.
+- `mint workflow create` — Create a workflow. Requires exactly one trigger: `--cron <expr>` for scheduled or `--push-repo <owner/repo>` (repeatable) for push-triggered. Key flags: `--name`, `--type` (one of `changelog`, `source-code-agent`, `translations`, `writing-style`, `typo-check`, `broken-link-detection`, `seo-metadata-audit`, `assistant-docs-updates`, `contextual-feedback-docs-updates`; omit for custom), `--prompt`, `--context-repo` (repeatable, up to 10), `--automerge`, `--file <path>` (JSON/YAML file overrides inline flags). Shared flags: `--subdomain`, `--format` (table/json).
+- `mint workflow list` — List workflows for the current deployment. Shared flags: `--subdomain`, `--format` (table/json).
+- `mint workflow delete <id>` — Delete a workflow by ID. Use `mint workflow list` to get the ID.
 
 ### Maintenance
 
