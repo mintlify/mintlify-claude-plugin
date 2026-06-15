@@ -95,6 +95,7 @@ One of: `mint`, `maple`, `palm`, `willow`, `linden`, `almond`, `aspen`, `sequoia
 | `almond` | Card-based, minimalist |
 | `aspen` | Modern, supports complex navigation |
 | `sequoia` | Minimal, elegant, large-scale content |
+| `luma` | Clean, minimal design for polished documentation |
 
 ## Colors
 
