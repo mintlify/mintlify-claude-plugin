@@ -108,9 +108,9 @@ Numbered step-by-step procedures.
     npm i -g mint
     ```
   </Step>
-  <Step title="Initialize your project">
+  <Step title="Create your project">
     ```bash
-    mint init
+    mint new my-docs
     ```
   </Step>
   <Step title="Start development server">

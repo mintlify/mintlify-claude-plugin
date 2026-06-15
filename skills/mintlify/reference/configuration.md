@@ -501,7 +501,7 @@ export const Counter = () => {
 };
 ```
 
-Import in any page:
+Import in any page using the root-relative path to the file:
 
 ```mdx
 import { Counter } from "/snippets/counter.jsx";
@@ -509,7 +509,7 @@ import { Counter } from "/snippets/counter.jsx";
 <Counter />
 ```
 
-JSX components must be in `/snippets/`. Nested imports between snippets are not supported.
+JSX components can live in any directory, not just `/snippets/`. Nested imports between snippet files are not supported.
 
 ## Hidden pages
 
