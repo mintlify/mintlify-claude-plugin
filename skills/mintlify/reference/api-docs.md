@@ -117,8 +117,25 @@ Control the API playground behavior in `docs.json`:
 - `params.expanded`: Expand all parameters by default. `"all"` or `"closed"` (default).
 - `params.post`: OpenAPI schema field keys to surface as pills next to parameter names (array of strings).
 - `url`: Set to `"full"` to always show the full base URL.
-- `examples.languages`: `bash`, `go`, `java`, `javascript`, `node`, `php`, `powershell`, `python`, `ruby`, `swift`.
+- `examples.languages`: Supported values — `bash` (cURL), `python`, `javascript`, `node`, `php`, `go`, `java`, `ruby`, `powershell`, `swift`, `csharp`, `dotnet`, `typescript`, `c`, `c++`, `kotlin`, `rust`, `dart`.
 - `examples.defaults`: `"required"` or `"all"` (include optional params).
 - `examples.prefill`: Pre-fill playground fields with spec example values. Default: `false`.
 - `examples.autogenerate`: Generate code samples from API specs. Default: `true`.
 - `mdx.auth.method`: `"bearer"`, `"basic"`, `"key"`, `"cobo"`.
+
+## Response rendering
+
+The playground renders responses automatically based on the `Content-Type` header:
+
+- `image/*` — rendered inline as an image.
+- `audio/*` — rendered with a built-in audio player.
+- `video/*` — rendered with a built-in video player.
+- All other types — displayed in a code block.
+
+## Parameter anchor links
+
+Every parameter in the playground has a clickable anchor link. Hover over a parameter name to reveal the link icon, then click to copy a direct URL to that parameter. The URL format is `your-docs-url/endpoint-path#parameter-name`. For nested parameters, the anchor includes the parent path.
+
+## Custom endpoint pages
+
+Use the `x-mint` extension in your OpenAPI spec to customize individual endpoint pages (metadata, playground behavior, additional content) while keeping all API documentation in one file. Alternatively, create individual MDX pages for full per-page control.

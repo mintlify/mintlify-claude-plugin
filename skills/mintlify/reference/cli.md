@@ -10,7 +10,7 @@ Available on all commands.
 
 | Flag | Description |
 |------|-------------|
-| `--telemetry` | Enable or disable anonymous usage telemetry. |
+| `--telemetry`, `-t` | Enable or disable anonymous usage telemetry. |
 | `--help`, `-h` | Display help for the command. |
 | `--version`, `-v` | Display the CLI version. Alias for `mint version`. |
 
@@ -26,18 +26,6 @@ Available on all commands.
 - `mint a11y` — Accessibility checks (alt text, color contrast). `--skip-contrast` or `--skip-alt-text` to narrow scope.
 - `mint score [url]` — Score a docs site's AI/agent readiness. Checks llms.txt, MCP discoverability, robots.txt, sitemap, structured data, response latency, and more. Requires `mint login`. Defaults to your configured subdomain. `--format` accepts `table` (default), `plain`, or `json`.
 
-## Analytics
-
-All `mint analytics` subcommands share these flags: `--subdomain`, `--from`, `--to`, `--format` (plain/table/json/graph; default: plain).
-
-- `mint analytics stats` — KPI numbers (views, visitors, searches, feedback, assistant usage). `--page` filters to one path.
-- `mint analytics search` — Search analytics. `--query` filters by search term substring. `--page` filters by top clicked page.
-- `mint analytics feedback` — Feedback analytics. `--type`: `page` (aggregate by page) or `code` (code snippet feedback). `--page` filters to one path.
-- `mint analytics conversation list` — List assistant conversations. `--page` filters by page referenced in sources.
-- `mint analytics conversation view <id>` — View a single conversation.
-- `mint analytics conversation buckets list` — List conversation category buckets.
-- `mint analytics conversation buckets view <id>` — View conversations in a bucket.
-
 ## Authentication
 
 - `mint login` — Authenticate your Mintlify account.
@@ -46,7 +34,7 @@ All `mint analytics` subcommands share these flags: `--subdomain`, `--from`, `--
 
 ## Configuration
 
-- `mint config set <key> <value>` — Persist a config value. Valid keys: `subdomain`, `dateFrom`, `dateTo`.
+- `mint config set <key> <value>` — Persist a config value. Valid keys: `subdomain`.
 - `mint config get <key>` — Read a stored config value.
 - `mint config clear <key>` — Remove a stored config value.
 
@@ -54,13 +42,13 @@ All `mint analytics` subcommands share these flags: `--subdomain`, `--from`, `--
 
 - `mint new [directory]` — Scaffold a new Mintlify docs site. `--name` and `--theme` set initial config. `--template` selects a pre-defined template. `--force` overwrites an existing directory.
 
-## Workflows
+## Automations
 
-All `mint workflow` subcommands share these flags: `--subdomain`, `--format` (table/json; default: table).
+All `mint automations` subcommands share these flags: `--subdomain`, `--format` (table/json; default: table). `mint workflow` and `mint workflows` continue to work as aliases.
 
-- `mint workflow create` — Create a workflow. Requires exactly one trigger: `--cron <expr>` for scheduled or `--push-repo <owner/repo>` (repeatable) for push-triggered. Key flags: `--name`, `--type` (one of `changelog`, `source-code-agent`, `translations`, `writing-style`, `typo-check`, `broken-link-detection`, `seo-metadata-audit`, `assistant-docs-updates`, `contextual-feedback-docs-updates`; omit for custom), `--prompt`, `--context-repo` (repeatable, up to 10), `--automerge`, `--file <path>` (JSON/YAML file overrides inline flags).
-- `mint workflow list` — List workflows for the current deployment.
-- `mint workflow delete <id>` — Delete a workflow by ID. Use `mint workflow list` to get the ID.
+- `mint automations create` — Create an automation. Requires exactly one trigger: `--cron <expr>` for scheduled or `--push-repo <owner/repo>` (repeatable) for push-triggered. Key flags: `--name`, `--type` (one of `changelog`, `source-code-agent`, `translations`, `writing-style`, `typo-check`, `broken-link-detection`, `seo-metadata-audit`, `assistant-docs-updates`, `contextual-feedback-docs-updates`; omit for custom), `--prompt`, `--context-repo` (repeatable, up to 10), `--automerge`, `--file <path>` (JSON/YAML file overrides inline flags).
+- `mint automations list` — List automations for the current deployment.
+- `mint automations delete <id>` — Delete an automation by ID. Use `mint automations list` to get the ID.
 
 ## Maintenance
 
@@ -75,3 +63,12 @@ These commands are registered but not yet functional. Running them records inter
 - `mint test` — Documentation testing.
 - `mint signup` — Account sign-up from the CLI.
 - `mint mcp` — MCP server for documentation.
+
+## Telemetry
+
+The CLI collects anonymous usage telemetry by default. Opt out with `--telemetry false` or by setting either environment variable:
+
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `MINTLIFY_TELEMETRY_DISABLED` | `1` | Disable Mintlify CLI telemetry. |
+| `DO_NOT_TRACK` | `1` | Disable telemetry using the Console Do Not Track standard. |
