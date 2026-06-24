@@ -156,6 +156,45 @@ Appear on all pages regardless of active section:
 }
 ```
 
+## Global navigation
+
+`navigation.global` supports tabs, anchors, dropdowns, languages, versions, and products that appear on all pages regardless of active section. Useful for persistent switchers and cross-cutting links.
+
+```json
+{
+  "navigation": {
+    "global": {
+      "tabs": [
+        { "tab": "API", "href": "/api-reference", "icon": "square-terminal" }
+      ],
+      "anchors": [
+        { "anchor": "Changelog", "icon": "list", "href": "/changelog" }
+      ],
+      "languages": [
+        { "language": "en", "default": true },
+        { "language": "es" }
+      ],
+      "versions": [
+        { "version": "v2", "default": true },
+        { "version": "v1" }
+      ],
+      "products": [
+        { "product": "Core API", "icon": "server" },
+        { "product": "Mobile SDK", "icon": "smartphone" }
+      ]
+    }
+  }
+}
+```
+
+Global element properties:
+- `global.tabs`: Each entry requires `tab` (string) and `href`. Optional: `icon`, `iconType`, `hidden`.
+- `global.anchors`: Each entry requires `anchor` (string) and `href`. Optional: `icon`, `iconType`, `color.light`, `color.dark`, `hidden`.
+- `global.dropdowns`: Each entry requires `dropdown` (string) and `href`. Optional: `icon`, `iconType`, `hidden`.
+- `global.languages`: Each entry requires `language` (code string). Optional: `default`, `hidden`, `href`.
+- `global.versions`: Each entry requires `version` (string). Optional: `default`, `hidden`, `href`.
+- `global.products`: Each entry requires `product` (string). Optional: `description`, `icon`, `iconType`.
+
 ## Dropdowns
 
 ```json
@@ -265,7 +304,7 @@ Version properties:
 }
 ```
 
-Each language entry can include its own `banner` configuration.
+Each language entry can include its own `banner`, `footer`, and `navbar` configuration overrides.
 
 ## OpenAPI in navigation
 

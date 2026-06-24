@@ -6,6 +6,29 @@ Full docs.json settings, snippets, hidden pages, and custom CSS/JS.
 
 The `docs.json` file controls the entire site. Required fields: `theme`, `name`, `colors.primary`, and `navigation`.
 
+### Splitting configuration with `$ref`
+
+Use `$ref` at any level of `docs.json` to load configuration from another JSON file. Useful for splitting large configs or sharing navigation across deployments.
+
+```json
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Your Docs",
+  "colors": { "primary": "#3B82F6" },
+  "navigation": {
+    "$ref": "./navigation.json"
+  }
+}
+```
+
+Rules:
+- `$ref` must be a relative path to a `.json` file.
+- When `$ref` resolves to an object, sibling keys in the same block take precedence over matching keys in the referenced file.
+- When `$ref` resolves to a non-object (e.g., an array), sibling keys are ignored.
+- Referenced files can contain their own `$ref` entries, resolved relative to that file.
+- Paths must stay within the project root. Circular references cause a build error.
+
 ```json
 {
   "$schema": "https://mintlify.com/docs.json",
