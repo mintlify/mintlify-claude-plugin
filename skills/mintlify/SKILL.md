@@ -3,9 +3,11 @@ name: mintlify
 description: Comprehensive reference for building Mintlify documentation sites. Use when creating pages, configuring docs.json, adding components, setting up navigation, or working with API references. Routes to detailed reference files for all components and configuration options.
 ---
 
+<!-- Generated from mintlify/docs/agent-context. Edit the canonical source, not this copy. -->
+
 # Mintlify reference
 
-Reference for building documentation with Mintlify. This file covers essentials that apply to every task. For detailed reference on specific topics, read the files listed in the reference index below.
+Reference for working on Mintlify projects. This file covers essentials that apply to every task. For detailed reference on specific topics, read the files listed in the reference index below.
 
 ## Reference index
 
@@ -18,22 +20,24 @@ Read these files **only when your task requires them**. They are in the `referen
 | `reference/navigation.md` | Modifying site navigation structure (groups, tabs, anchors, dropdowns, products, versions, languages, OpenAPI in nav). |
 | `reference/api-docs.md` | Setting up API documentation (OpenAPI, AsyncAPI, MDX manual API pages, extensions, playground config). |
 | `reference/cli.md` | Running CLI commands (dev, validate, analytics, workflow, score, broken-links, a11y, config, and all flags). |
+| `reference/site-discovery.md` | Creating a new documentation site or replacing substantial placeholder content. |
 
 ## MCP servers
 
 Two Mintlify MCP servers are available. Use them alongside the reference files in this skill.
 
-### Mintlify (docs MCP)
+### Mintlify Search
 
 Read-only access to Mintlify's published documentation. Use it when the reference files don't cover a specific detail, when you need an up-to-date component signature, or to verify an unfamiliar config option.
 
 Tools:
 - `search_mintlify` — Search the Mintlify knowledge base by query. Good for finding guides, examples, and API references.
 - `query_docs_filesystem_mintlify` — Browse the docs file tree (`ls`, `cat`, `grep`, `find`, etc.). Good for reading a specific docs page.
+- `submit_feedback` — Report a docs page that is incorrect, outdated, confusing, or incomplete.
 
-### Mintlify MCP (dashboard MCP)
+### Mintlify Admin
 
-Write access to a Mintlify project. Requires OAuth login on first use — Claude Code will open a browser window to authenticate.
+Write access to a Mintlify project. Requires OAuth on first use. Complete authentication in the browser when prompted.
 
 Use this server when the user wants to edit their Mintlify content, restructure navigation, or open a pull request. All changes happen on a branch and must be reviewed before merging.
 
@@ -42,19 +46,21 @@ Workflow: call `checkout` first (always), then use `read`/`search`/`edit_page`/`
 Key tools:
 - **`checkout`** — Start a session on a branch (required first call). Returns an `editorUrl` to preview changes live.
 - **`list_branches`** — List existing branches; call before `checkout` to attach to one.
+- **`list_deployments`** — Discover which deployment(s) this connection can access.
 - **`read`** / **`search`** — Fetch a page's MDX or search across pages.
 - **`edit_page`** / **`write_page`** — Apply targeted edits or overwrite a page.
 - **`list_nodes`** / **`create_node`** / **`update_node`** / **`move_node`** / **`delete_node`** — Manage the navigation tree.
 - **`update_config`** — Modify `docs.json` (theme, nav roots, integrations, SEO).
 - **`diff`** — See all changes relative to `main`.
+- **`get_session_state`** — Check the current session's status.
 - **`save`** — Open a PR (`mode: "pr"`) or push to the branch (`mode: "commit"`).
 - **`discard_session`** — Drop all in-session changes.
 
-<Note>
 Keep each session focused on one change. Smaller sessions produce easier-to-review PRs. Open the `editorUrl` to watch changes render live.
-</Note>
 
 ## Before you start
+
+For a new site or a broad initial generation, read `reference/site-discovery.md` before planning the content.
 
 Read the project's `docs.json` file first. It defines the site's navigation, theme, colors, and configuration.
 
@@ -101,7 +107,7 @@ Store images in an `images/` directory. Reference with root-relative paths. All 
 
 ## Page frontmatter
 
-Every page requires `title` in its frontmatter. Include `description` and `keywords` for SEO.
+Include `title`, `description`, and `keywords` in frontmatter. `title` is technically optional (Mintlify generates one from the file path if omitted), but set it explicitly for clarity and SEO.
 
 ```yaml
 ---
@@ -113,22 +119,24 @@ keywords: ["relevant", "search", "terms"]
 
 ### Common frontmatter fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `title` | string | Yes | Page title in navigation and browser tabs. |
-| `description` | string | No | Brief description for SEO. Displays under the title. |
-| `sidebarTitle` | string | No | Short title for sidebar navigation. |
-| `icon` | string | No | Lucide, Font Awesome, or Tabler icon name. Also accepts a URL or file path. |
-| `tag` | string | No | Label next to page title in sidebar (e.g., "NEW"). |
-| `hidden` | boolean | No | Remove from sidebar. Page still accessible by URL. |
-| `mode` | string | No | Page layout: `default`, `wide`, `custom`, `frame`, `center`. |
-| `keywords` | array | No | Search terms for internal search and SEO. |
-| `api` | string | No | API endpoint for interactive playground (e.g., `"POST /users"`). |
-| `openapi` | string | No | OpenAPI endpoint reference (e.g., `"GET /endpoint"`). |
+| Field | Type | Description |
+|-------|------|-------------|
+| `title` | string | Page title in navigation and browser tabs. Auto-generated from the path if omitted. |
+| `description` | string | Brief description for SEO. Displays under the title. |
+| `sidebarTitle` | string | Short title for sidebar navigation. |
+| `icon` | string | Lucide, Font Awesome, or Tabler icon name. Also accepts a URL or file path. |
+| `tag` | string | Label next to page title in sidebar (e.g., "NEW"). |
+| `hidden` | boolean | Remove from sidebar. Page still accessible by URL. |
+| `mode` | string | Page layout: `default`, `wide`, `custom`, `frame`, `center`. |
+| `keywords` | array | Search terms for internal search and SEO. |
+| `api` | string | API endpoint for interactive playground (e.g., `"POST /users"`). |
+| `openapi` | string | OpenAPI endpoint reference (e.g., `"GET /endpoint"`). |
+
+For the complete list including `searchable`, `boost`, `deprecated`, `related`, `groups`, and more, read `reference/configuration.md`.
 
 ## Quick component reference
 
-Below are the most commonly used components. For full props and all 24 components, read `reference/components.md`.
+Below are the most commonly used components. For full props and all 25 components, read `reference/components.md`.
 
 ### Callouts
 
@@ -211,7 +219,7 @@ Use `<Columns>` to arrange cards (or other content) in a grid. `cols` accepts 1-
 
 ## CLI commands
 
-Install with `npm i -g mint`. Key commands: `mint dev` (local preview), `mint validate`, `mint broken-links`, `mint a11y`, `mint score`, `mint analytics`, `mint workflow`, `mint new`. Read `reference/cli.md` for full flags and subcommands.
+Install with `npm i -g mint`. Key commands: `mint dev` (local preview), `mint validate`, `mint broken-links`, `mint a11y`, `mint score`, `mint automations`, `mint deslop`, `mint new`, `mint signup`. Read `reference/cli.md` for full flags and subcommands.
 
 ## Writing standards
 
