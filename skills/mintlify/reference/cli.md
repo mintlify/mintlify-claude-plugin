@@ -25,12 +25,14 @@ Available on all commands.
 - `mint broken-links` — Check for broken internal links. `--check-anchors` validates `#` anchors. `--check-external` checks external URLs. `--check-redirects` checks that redirect destinations in `docs.json` resolve. `--check-snippets` checks links inside `<Snippet>` components.
 - `mint a11y` — Accessibility checks (alt text, color contrast). `--skip-contrast` or `--skip-alt-text` to narrow scope.
 - `mint score [url]` — Score a docs site's AI/agent readiness. Checks llms.txt, MCP discoverability, robots.txt, sitemap, structured data, response latency, and more. Requires `mint login`. Defaults to your configured subdomain. `--format` accepts `table` (default), `plain`, or `json`.
+- `mint deslop [files...]` — Check pages for AI-sounding prose and get rewrite suggestions. Requires `mint login`. Without `files`, checks the `.md`/`.mdx` pages changed in your working tree (Git diff plus untracked files). Flags: `--format` (`table`/`plain`/`json`), `--subdomain`, `--threshold` (0-1, default 0.5), `--fix-whitespace` (normalizes trailing spaces, blank-line runs, and invisible Unicode outside code blocks/frontmatter).
 
 ## Authentication
 
 - `mint login` — Authenticate your Mintlify account.
 - `mint logout` — Log out of your account.
 - `mint status` — Show current authentication status (CLI version, email, org, subdomain).
+- `mint signup [flags]` — Create a new Mintlify account from the terminal. Flags: `--firstName`, `--lastName`, `--company`, `--email`; omit any to enter it interactively. Waits until you click the emailed verification link before it logs you in — run as a background process in scripts.
 
 ## Configuration
 
@@ -54,15 +56,6 @@ All `mint automations` subcommands share these flags: `--subdomain`, `--format` 
 
 - `mint update` — Update the CLI to the latest version.
 - `mint version` — Show installed CLI and client versions.
-
-## Coming soon
-
-These commands are registered but not yet functional. Running them records interest via telemetry.
-
-- `mint ai` — AI-powered documentation tools.
-- `mint test` — Documentation testing.
-- `mint signup` — Account sign-up from the CLI.
-- `mint mcp` — MCP server for documentation.
 
 ## Telemetry
 
