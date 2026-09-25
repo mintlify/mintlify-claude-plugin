@@ -8,7 +8,7 @@ The `docs.json` file controls the entire site. Required fields: `theme`, `name`,
 
 ### Splitting configuration with `$ref`
 
-Use `$ref` at any level of `docs.json` to load configuration from another JSON file. Useful for splitting large configs or sharing navigation across deployments.
+Use `$ref` at any level of `docs.json` to load configuration from another JSON file. Useful for splitting large configs or sharing navigation across projects.
 
 ```json
 {
@@ -60,7 +60,7 @@ The SKILL.md file lists common frontmatter fields. Here is the complete set. All
 | `icon` | string | Lucide, Font Awesome, or Tabler icon name. Also accepts a single emoji, a URL, or a file path. |
 | `iconType` | string | Font Awesome icon style: `regular`, `solid`, `light`, `thin`, `sharp-solid`, `duotone`, `brands`. |
 | `tag` | string | Label next to page title in sidebar (e.g., "NEW"). |
-| `hidden` | boolean | Remove from sidebar. Page still accessible by URL. Also excludes the page from search, sitemaps, external indexing, AI context, and `llms.txt`. Remove the field (or set `false`) to make a page visible again. |
+| `hidden` | boolean | Remove from sidebar. Page still accessible by URL. Also excludes the page from search, sitemaps, external indexing, AI context, and `llms.txt`. To make a page visible again, remove the field entirely. Do not set `false`. |
 | `noindex` | boolean | Exclude from site search, sitemaps, search engine indexing, and AI assistant context. Still visible in navigation. |
 | `searchable` | boolean | At the page level, only `searchable: false` has an effect: excludes the page from site search and AI assistant context while keeping it indexable externally and visible in navigation. Does not override `hidden: true`. Pages with `searchable: false` still appear in `llms.txt` and `llms-full.txt`. |
 | `boost` | number | Multiply the page's in-product search ranking. Values above 1 prioritize, between 0 and 1 de-prioritize. No effect when `searchable: false`. |
@@ -70,7 +70,7 @@ The SKILL.md file lists common frontmatter fields. Here is the complete set. All
 | `hideApiMarker` | boolean | Hide the HTTP method badge next to the page title in the sidebar. |
 | `contextual` | object | Override the site-wide contextual menu (`options`, `display`) for this page. `options: []` disables it. |
 | `groups` | string[] | Limit the page to users in specific groups. With authentication, restricts access. With standalone personalization, only controls navigation visibility. Users can still open the page by direct URL. |
-| `mode` | string | Page layout: `default`, `wide`, `custom`, `frame`, `center`. |
+| `mode` | string | Page layout: `default`, `wide`, `custom`, `frame`, `center`, `assistant`. |
 | `keywords` | array | Search terms for internal search and SEO. |
 | `api` | string | API endpoint for interactive playground (e.g., `"POST /users"`). |
 | `openapi` | string | OpenAPI endpoint reference (e.g., `"GET /endpoint"`). |
@@ -112,6 +112,12 @@ mode: "frame"
 ---
 title: "Page title"
 mode: "center"
+---
+
+# Assistant: full-screen assistant chat replaces page content (all themes; requires the assistant enabled)
+---
+title: "Ask AI"
+mode: "assistant"
 ---
 ```
 
@@ -366,7 +372,7 @@ The current API version is {{apiVersion}}.
 
 Shows "Last modified on [date]" on all pages. Override per-page with `timestamp` frontmatter.
 
-Date precedence: (1) the page's `lastUpdatedDate` frontmatter, (2) the date of the last Git commit that modified the page (GitHub/GitLab deployments), (3) the most recent deployment timestamp. Set `lastUpdatedDate` when Git history doesn't reflect when content changed (e.g., imported or synced content).
+Date precedence: (1) the page's `lastUpdatedDate` frontmatter, (2) the date of the last Git commit that modified the page (GitHub/GitLab projects), (3) the most recent deployment timestamp. Set `lastUpdatedDate` when Git history doesn't reflect when content changed (e.g., imported or synced content).
 
 ## Interaction
 
@@ -386,11 +392,18 @@ Controls whether clicking a navigation group navigates to its first page (`true`
     "canonical": "https://docs.example.com",
     "og:locale": "en_US"
   },
-  "indexing": "navigable"
+  "indexing": "navigable",
+  "paths": [
+    {
+      "path": "guides/v1",
+      "metatags": { "robots": "noindex" }
+    }
+  ]
 }
 ```
 
 - `indexing`: `"navigable"` (only nav pages) or `"all"` (every page including hidden).
+- `paths`: Folder-scoped meta tags. Each entry has `path` (folder relative to docs root, no leading or trailing slash, unique) and `metatags` (non-empty string values). Precedence: `seo.metatags` < matching `seo.paths` (longer path wins) < page frontmatter. Paths match page URLs, so language folders need their own entries (`guides/v1` doesn't apply to `es/guides/v1`). Mintlify ignores a `canonical` key in `paths` entries.
 
 ## Search
 
