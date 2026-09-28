@@ -1,0 +1,8 @@
+# Copied in from mintlify/docs agent-context/evals by CI; not part of the plugin
+evals/
+
+# The Claude plugin directory rejects OS metadata files
+.DS_Store
+Thumbs.db
+desktop.ini
+__MACOSX/
