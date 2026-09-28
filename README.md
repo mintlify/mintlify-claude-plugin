@@ -12,6 +12,15 @@ The skill covers:
 - **Configuration** — Complete `docs.json` settings reference including theme, colors, logo, fonts, navbar, footer, redirects, integrations, and custom CSS/JS
 - **Navigation** — All navigation patterns: groups, tabs, anchors, dropdowns, products, versions, and languages
 - **API docs** — OpenAPI and AsyncAPI setup, endpoint pages, API playground configuration
+- **CLI** — Common `mint` CLI commands and their key flags
+- **Product context** — An interview that records who your docs are for in `.mintlify/product-brief.md` in your project, so later sessions don't ask again
+
+## MCP setup
+
+This plugin includes two Mintlify MCP servers that are activated automatically when you install the plugin.
+
+- **Mintlify Search** (`https://mintlify.com/docs/mcp`) — Read-only access to Mintlify's published documentation. Use to look up components, config options, guides, and other reference material. Its `submit_feedback` tool sends a report about an incorrect or outdated docs page to Mintlify.
+- **Mintlify Admin** (`https://mcp.mintlify.com`) — Write access to your Mintlify project. Requires OAuth on first use. Content edits go to a session branch and reach your site through a pull request. Project-level changes made through `execute_code`, such as workflows, settings, members, and integrations, apply immediately to your live project, so the skill tells Claude to confirm them with you first.
 
 ## Installation
 
@@ -42,6 +51,8 @@ The skill loads a concise core reference and routes to detailed reference files 
 | `reference/configuration.md` | Full `docs.json` schema and frontmatter fields |
 | `reference/navigation.md` | Navigation patterns and when to use each |
 | `reference/api-docs.md` | API documentation setup and playground config |
+| `reference/cli.md` | CLI commands and flags |
+| `reference/product-context.md` | Product brief interview and how the brief is reused |
 
 ## License
 
