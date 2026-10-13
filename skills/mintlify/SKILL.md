@@ -1,6 +1,6 @@
 ---
 name: mintlify
-description: Comprehensive reference for building Mintlify documentation sites. Use when creating pages, configuring docs.json, adding components, setting up navigation, working with API references, or customizing appearance and browser behavior with CSS, JavaScript, React, and snippets, including styling one page or component, colors, fonts, sidebar or content width, hiding elements, and custom scripts. Routes to detailed reference files for all components and configuration options.
+description: Set up, write, and publish documentation sites with Mintlify, and work on existing Mintlify projects. Use when the user wants to create a docs site for a repo or product, turn a docs/ folder or README into a hosted docs site, document an API from an OpenAPI spec, migrate docs from Docusaurus, GitBook, ReadMe, Fern, or another platform, preview docs locally, or publish docs to a shareable URL. Also use when editing a project with docs.json, including pages, navigation, components, API references, and customizing appearance or browser behavior with CSS, JavaScript, React, and snippets.
 ---
 
 <!-- Generated from mintlify/docs/agent-context. Edit the canonical source, not this copy. -->
@@ -23,6 +23,24 @@ Read these files **only when your task requires them**. They are in the `referen
 | `reference/product-context.md` | Before substantial content work (new site, broad restructure, first-time section setup) — check for and maintain `.mintlify/product-brief.md`. |
 | `reference/customization/index.md` | Customizing appearance or browser behavior with CSS, JavaScript, React snippets, selectors, or CSS variables. |
 
+## Starting a new docs site
+
+If the user wants a new docs site, wants to publish docs, or has no `docs.json` yet, run this workflow yourself. Ask the user only for information or approvals you cannot supply. Do not send them to a browser-first quickstart when you can run terminal commands.
+
+1. Check `node --version` (v20.17.0 or newer). Run `mint --version`; if missing, install with `npm i -g mint`. If it's installed, run `mint update`.
+2. Run `mint status`. If it shows an organization, use the existing account. Otherwise, ask whether the user has a Mintlify account. If they do, run `mint login`. If not, ask for first name, last name, company, and email and run `mint signup --firstName <first> --lastName <last> --company <company> --email <email>` as a background process. It waits for email verification. Tell the user to click the verification link and finish onboarding in the browser. Never invent signup details.
+3. After verification and onboarding, run `mint status` again to confirm an organization and subdomain. If no subdomain appears, ask the user to finish selecting or connecting a GitHub repository in the onboarding browser tab, then retry.
+4. Unless you're already working in it, ask the user for the URL of the connected repository (`mint status` doesn't show it) and clone it. If the user connected their own docs repository, preserve its content, and add a `docs.json` if it has none. If Mintlify created the repository, it contains starter content; replace that with the user's existing Markdown docs instead of writing placeholder pages. Use `mint new <directory> --name <name> --theme <theme>` only if the user wants a different theme than the starter, and scaffold into a new, empty directory. Never use `--force` on a directory with user files.
+5. Run `mint dev --no-open` as a background process from the directory containing `docs.json`. Report the local URL so the user can preview. Run `mint validate` and `mint broken-links` and fix issues you caused.
+6. Commit and push to the connected repository to deploy.
+7. Verify that `https://<subdomain>.mintlify.site` loads before you report the URL.
+
+The user only needs the browser for email verification, OAuth approval, and connecting GitHub.
+
+### Migrating from another platform
+
+For Docusaurus, GitBook, ReadMe, Fern, or Document360, follow the matching guide at `https://mintlify.com/docs/migration/<platform>` (for example `docusaurus`), using the Mintlify Search MCP server to read it. The scraper only handles simple public sites. Complex sites migrate from source files.
+
 ## MCP servers
 
 Two Mintlify MCP servers are available. Use them alongside the reference files in this skill.
@@ -42,14 +60,15 @@ Write access to a Mintlify project. Requires OAuth on first use. Complete authen
 
 Use this server when the user wants to edit their Mintlify content, restructure navigation, or open a pull request. Content changes buffer on a session branch; nothing touches the deploy branch until `save`. Project management tool changes apply immediately to the live project without a branch or pull request.
 
-Workflow: call `checkout` first (always), then use `read`/`search`/`edit_page`/`write_page`/`list_nodes`/`create_node`/`update_node`/`move_node`/`delete_node`/`update_config` to make changes, then call `save` to publish (or `discard_session` to abandon).
+Workflow: `read`, `search`, `list_nodes`, and `read_comments` work without a checkout and read the deploy branch. To edit, call `checkout`, then use `read`/`search`/`edit_page`/`write_page`/`list_nodes`/`create_node`/`update_node`/`move_node`/`delete_node`/`update_config` to make changes, then call `save` to publish (or `discard_session` to abandon).
 
 Key tools:
-- **`checkout`** — Start a session on a branch (required first call). Returns a branch-level `editorUrl` to preview changes live.
+- **`checkout`** — Start a session on a branch (required before editing). Returns a branch-level `editorUrl` to preview changes live.
 - **`list_branches`** — List existing branches; call before `checkout` to attach to one.
 - **`list_deployments`** — Discover which project(s) this connection can access.
 - **`read`** / **`search`** — Fetch a page's MDX or search across pages.
 - **`edit_page`** / **`write_page`** — Apply targeted edits or overwrite a page.
+- **`read_comments`** / **`add_comment`** / **`reply_to_comment`** / **`resolve_comment`** — Read open editor comment threads on a page, start a thread on exact text, reply as the agent, or resolve threads. Adding, replying and resolving require an OAuth session and a checkout on the thread's branch.
 - **`list_nodes`** / **`create_node`** / **`update_node`** / **`move_node`** / **`delete_node`** — Manage the navigation tree. If a `create_node`, `update_node`, `move_node`, or `delete_node` call leaves the navigation invalid (for example, a page at the root next to tabs), the response includes a `navigationErrors` field. Fix these errors before `save`, because Mintlify can drop invalid nodes from the published navigation.
 - **`update_config`** — Modify `docs.json` (theme, nav roots, integrations, SEO).
 - **`upload_image`** / **`finalize_image_upload`** — Add a local image to the session branch. Call `upload_image` with the destination `path` (for example, `images/dashboard.png`), `contentType`, and exact `size` in bytes. `PUT` the file bytes to the returned `uploadUrl` with the returned `headers`, then call `finalize_image_upload` with the `uploadId` and the same `path`. Use the returned `src` in MDX or in the `docs.json` `logo` or `favicon` fields. Uploading to an existing `path` replaces the image. Mintlify only accepts SVGs for logos and favicons, so pass `purpose: "logo"` to both tools. Images publish with the session on `save`.
@@ -226,7 +245,7 @@ Use `<Columns>` to arrange cards (or other content) in a grid. `cols` accepts 1-
 
 ## CLI commands
 
-Install with `npm i -g mint`. Key commands: `mint dev` (local preview), `mint validate`, `mint broken-links`, `mint a11y`, `mint test` (generate tests for code blocks), `mint score`, `mint analytics` (traffic, search, feedback, and assistant conversations; Pro and Enterprise plans), `mint new`, `mint signup`, `mint index` (install the Mintlify Index MCP server in supported coding agents). Read `reference/cli.md` for full flags and subcommands.
+Install with `npm i -g mint`. Key commands: `mint dev` (local preview), `mint validate`, `mint broken-links`, `mint a11y`, `mint test` (generate tests for code blocks), `mint score`, `mint analytics` (traffic, search, feedback, and assistant conversations; Pro and Enterprise plans), `mint new`, `mint signup`. Read `reference/cli.md` for full flags and subcommands.
 
 ## Writing standards
 
