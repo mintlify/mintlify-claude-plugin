@@ -22,6 +22,10 @@ Read these files **only when your task requires them**. They are in the `referen
 | `reference/cli.md` | Running common CLI commands (dev, validate, add-domain, analytics, score, broken-links, a11y, format, and config) and their key flags. |
 | `reference/product-context.md` | Before substantial content work (new site, broad restructure, first-time section setup) — check for and maintain `.mintlify/product-brief.md`. |
 | `reference/customization/index.md` | Customizing appearance or browser behavior with CSS, JavaScript, React snippets, selectors, or CSS variables. |
+| `reference/writing.md` | Before creating a page or writing more than a sentence or two: the no-invention rule, page creation and editing steps, quality bar, audience, titles and descriptions, links. |
+| `reference/publishing-and-review.md` | Publishing, branches and pull requests, "is this live" questions, undoing changes, and reviewing a page with suggestions and comments. |
+| `reference/project-settings.md` | Reading or changing dashboard settings (domains, git sources, auth, members, workflows, search, add-ons), settings no tool covers, and analytics questions. |
+| `reference/site-building.md` | Building or migrating a whole site, a section, or more than a handful of pages: research sizing, generation order, landing page, structure for common kinds of site, porting rules. |
 
 ## Starting a new docs site
 
@@ -37,9 +41,20 @@ If the user wants a new docs site, wants to publish docs, or has no `docs.json` 
 
 The user only needs the browser for email verification, OAuth approval, and connecting GitHub.
 
+### No local repository
+
+When you have no local checkout and no CLI (for example, editing through the Mintlify Admin MCP server or inside the Mintlify editor), skip the `mint`, `git` and file-system steps in this skill:
+
+- Read and change pages, navigation and `docs.json` with the Admin MCP tools on a `branch`.
+- Create pages with `create_node`; `write_page` only replaces an existing page.
+- Preview with the `editorUrl` the tools return instead of `mint dev`. Validation runs on every write, so fix any error a write returns instead of running `mint validate`.
+- Publish with `publish` instead of pushing, and only when the user asks.
+- Keep the product brief from `reference/product-context.md` in the conversation instead of writing `.mintlify/product-brief.md`.
+- For a new site, follow `reference/site-building.md` against the existing project.
+
 ### Migrating from another platform
 
-For Docusaurus, GitBook, ReadMe, Fern, or Document360, follow the matching guide at `https://mintlify.com/docs/migration/<platform>` (for example `docusaurus`), using the Mintlify Search MCP server to read it. The scraper only handles simple public sites. Complex sites migrate from source files.
+For Docusaurus, GitBook, ReadMe, Fern, or Document360, follow the matching guide at `https://mintlify.com/docs/migration/<platform>` (for example `docusaurus`), using the Mintlify Search MCP server to read it. For any other platform, follow `https://mintlify.com/docs/migration/manual`. The scraper only handles simple public sites. Complex sites migrate from source files. Porting rules are in `reference/site-building.md`.
 
 ## MCP servers
 
@@ -83,6 +98,8 @@ Private pages: `list_nodes` accepts `visibility: "private"` to list the private 
 Keep each branch focused on one change. Smaller branches produce easier-to-review PRs. Open the `editorUrl` to watch changes render live. Prefer the page-level `editorUrl` from `create_node` or `publish` over the one from `create_branch`.
 
 ## Before you start
+
+Mintlify changes often, so don't rely on what you remember about it. When a detail isn't in this skill, check the current documentation with the Mintlify Search MCP server or at `https://mintlify.com/docs`.
 
 Before substantial content work, read `reference/product-context.md` and check for `.mintlify/product-brief.md`.
 
@@ -192,7 +209,7 @@ Below are the most commonly used components. For full props and all 26 component
 
 ### Tabs and code groups
 
-```mdx
+````mdx
 <Tabs>
   <Tab title="npm">
     ```bash
@@ -205,7 +222,7 @@ Below are the most commonly used components. For full props and all 26 component
     ```
   </Tab>
 </Tabs>
-```
+````
 
 ````mdx
 <CodeGroup>
@@ -247,7 +264,7 @@ Use `<Columns>` to arrange cards (or other content) in a grid. `cols` accepts 1-
 
 ## CLI commands
 
-Install with `npm i -g mint`. Key commands: `mint dev` (local preview), `mint validate`, `mint broken-links`, `mint a11y`, `mint test` (generate tests for code blocks), `mint score`, `mint analytics` (traffic, search, feedback, and assistant conversations; Pro and Enterprise plans), `mint new`, `mint signup`. Read `reference/cli.md` for full flags and subcommands.
+Install with `npm i -g mint`. Key commands: `mint dev` (local preview), `mint validate`, `mint broken-links`, `mint a11y`, `mint score`, `mint analytics` (traffic, search, feedback, and assistant conversations; Pro and Enterprise plans), `mint new`, `mint signup`. Read `reference/cli.md` for full flags and subcommands.
 
 ## Writing standards
 
