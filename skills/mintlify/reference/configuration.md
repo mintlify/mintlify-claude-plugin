@@ -450,9 +450,9 @@ Controls whether clicking a navigation group navigates to its first page (`true`
 }
 ```
 
-- `preset`: Layout. `"classic"` (logo top left), `"headline"` (title at the top, logo bottom right), or `"minimal"` (centered text above a logo panel). Omit for the default layout. With a preset, the eyebrow always uses a monospace font.
+- `preset`: Layout. `"classic"` (logo top left), `"headline"` (title at the top, logo bottom right), or `"minimal"` (centered text above a logo panel). Default: `"classic"`, or the original layout when `background` is set without a preset. With a preset, the eyebrow always uses a monospace font.
 - `appearance`: `"light"` or `"dark"`. Default: the site color scheme.
-- `surface`: Background style for preset thumbnails only. `"brand"` (default) tints the background and glow with the primary color hue, or uses `background.color` if set. `"neutral"` uses the site background color with no glow.
+- `surface`: Background style for preset thumbnails, including the default `classic`. `"brand"` (default) tints the background and glow with the primary color hue, or uses `background.color` if set. `"neutral"` uses the site background color with no glow.
 - `background`: Image path or absolute URL. On preset thumbnails, it replaces the `surface` background and glow.
 - `fonts.family` (required with `fonts`): Google Fonts family name, or the name of a self-hosted font. `fonts.source`: URL or path to a self-hosted font file. `fonts.format`: `"woff"`, `"ttf"`, or `"otf"`; required with `source` (`woff2` is not supported). If the font fails to load, thumbnails use the default font.
 - `eyebrow.source`: Navigation level whose name appears above the title: `"group"` (default), `"tab"`, `"dropdown"`, `"anchor"`, `"language"`, `"product"`, `"version"`, `"item"`, or `"none"` to hide it. Falls back to the group name when the page is not inside that level.
@@ -598,7 +598,7 @@ JSX components can live in any directory, not just `/snippets/`. Nested imports 
 
 ### npm packages
 
-To import React components from npm packages, add a `packages` key to `docs.json` (an empty object turns it on), a `package.json` listing every imported package under `dependencies` (including `react` and `react-dom`), and a committed `package-lock.json` or `pnpm-lock.yaml` next to `docs.json`. Deployments with `packages` fail on sites that use authentication or personalization.
+To import React components from npm packages, add a `packages` key to `docs.json` (an empty object turns it on), a `package.json` listing every imported package under `dependencies` (including `react` and `react-dom`), and a committed `package-lock.json` or `pnpm-lock.yaml` next to `docs.json`. Deployments with `packages` fail on sites that use authentication or personalization, or that restrict preview deployments with organization authentication or a password. While `packages` is in use, you can't turn on authentication, personalization, or preview access restrictions.
 
 ```json
 "packages": {
@@ -673,6 +673,19 @@ Add `.css` files to your repository. Class names become available in all MDX fil
 ```
 
 Built-in Tailwind CSS v3 classes are available, including arbitrary values (e.g., `w-[350px]`) and variants (`sm:`, `hover:`, `dark:`). All built-in components except Banner, MDX, and Visibility accept a `className` prop. Write class names out in full: Mintlify generates CSS only for class names found in the page source, so runtime-assembled names produce no CSS. Avoid the inline `style` prop; it can cause layout shift on page load.
+
+A page can define its own animation keyframes in a `<style>` block whose child is a static template literal. Name each keyframe `page-` followed by letters, digits, `_`, or `-`, and reference it from `animation` or a Tailwind arbitrary class such as `animate-[page-pulse_2s_infinite]`. Mintlify keeps only `@keyframes page-*` rules with `from`, `to`, or `N%` steps and plain declarations. It drops everything else: other rules and at-rules, `url()` and other fetching functions, `!important`, attributes on `<style>`, and interpolated content. A block left with nothing valid is removed.
+
+````mdx
+<style>{`
+  @keyframes page-pulse {
+    from { opacity: 1; }
+    to { opacity: 0.3; }
+  }
+`}</style>
+
+<div className="animate-[page-pulse_1s_ease-in-out_infinite_alternate]">Live</div>
+````
 
 ### JavaScript
 
