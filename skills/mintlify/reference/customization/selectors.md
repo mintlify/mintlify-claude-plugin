@@ -14,6 +14,10 @@ The [public custom CSS docs](https://www.mintlify.com/docs/customize/custom-scri
 
 Native selectors such as `main`, `a`, `img`, `svg`, and `footer` match many unrelated elements. Scope them to an authored class or a known region.
 
+## Layout regions
+
+Target the main layout regions with `[data-layout-item="<region>"]`. Each region has the same hook in every theme, while IDs such as `#sidebar-content` point to different elements in different themes. Regions: `banner`, `topbar`, `mobile-nav`, `sidebar` (outer sidebar panel), `content`, `page-header`, `side-panel` (right panel containing the TOC), `toc`, `pagination`, `footer`, `search-entry`, and `assistant-entry` (both cover desktop and mobile).
+
 ## Page background
 
 The page background is painted by a fixed `span#background-color`, not by `html` or `body`. Change its color with `docs.json` `background.color`; target the element only for effects that configuration cannot express.
@@ -62,6 +66,15 @@ Use as `[data-component-part="<name>"]` or `[data-component-name="<name>"]`. The
 | Sequoia    | `primary-header-button` (Sequoia theme only)                                                                                              |
 
 `.card-group` is a deprecated alias; author `<Columns>` for new content.
+
+## Table of contents
+
+The TOC root `#table-of-contents` also carries `[data-layout-item="toc-content"]`. Parts, as `[data-layout-item="<name>"]`: `toc-title` (the "On this page" heading; its button scrolls to top), `toc-list` (every `ul`, nested ones included), `toc-item` (`li`, also `.toc-item`), `toc-item-link`, `toc-indicator` (themes with a dot marker), `toc-separator`, `toc-actions` (contextual menu with `contextual.display: "toc"`), `toc-button`, `toc-button-icon`, and `toc-button-label`. `toc-button[data-variant]` holds the contextual option ID.
+
+- `toc-item[data-depth]` is 0-based: `"0"` for top-level headings.
+- The active item and its ancestors, and their links, get `data-active`. The exact active link gets `aria-current="location"`.
+- The root's `data-shell` (`panel`, `fluid`, `stack`), `data-marker` (`none`, `rail`, `arrow`, `dot`), and `data-look` (`default`, `mono`, `quiet`) vary by theme.
+- Built-in TOC styles sit in a cascade layer with `:where()`, so unlayered custom CSS overrides them.
 
 ## Auth controls
 

@@ -84,6 +84,8 @@ Group properties:
 }
 ```
 
+A tab, anchor, dropdown, or menu `item` with no `pages`, `groups`, or nested divisions links to its `href`. Use an absolute URL to open an external site in a new browser tab, or a root-relative path (for example, `"/platform/analytics"`) to open a page from another section in the same browser tab. If the entry has child navigation, it links to its first page instead.
+
 ### Menus (within tabs)
 
 ```json
@@ -340,7 +342,7 @@ When you add `openapi` to a navigation element without specifying pages, Mintlif
 
 ## SDK references
 
-Generate SDK reference pages from documentation-tool build artifacts by adding an `sdk` property to a tab or group. Set `format` to `typedoc`, `docfx`, `javadoc`, `sphinx`, `phpdoc`, or `go` (generate Go artifacts with `go run github.com/mintlify/mintlify-go-extractor@latest -o go.json` from inside the module); set `source` to an artifact path or HTTPS URL; and optionally set `directory` to control the generated pages' URL prefix (defaults to `sdk-reference`). Groups and pages inherit the nearest ancestor's `sdk` settings; a nested group with its own `sdk` overrides that inheritance.
+Generate SDK reference pages from documentation-tool build artifacts by adding an `sdk` property to a tab or group. Set `format` to `typedoc`, `docfx`, `javadoc`, `sphinx`, `phpdoc`, or `go` (generate Go artifacts with `go run github.com/mintlify/mintlify-go-extractor@latest -o go.json` from inside the module); set `source` to an artifact path or HTTPS URL; and optionally set `directory` to control the generated pages' URL prefix (defaults to `sdk-reference`). Groups and pages inherit the nearest ancestor's `sdk` settings; a nested group with its own `sdk` overrides that inheritance. Javadoc pages are grouped by package; a package with several kinds nests them under Interfaces, Classes, Enums, Records, Exceptions, Errors, and Annotations.
 
 ```json
 {
