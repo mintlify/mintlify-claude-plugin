@@ -12,7 +12,7 @@ All properties are browser-only and can be undefined during initialization. Neve
 | `window.mintlify.navigate(href, { replace })`             | Client-side navigation; fires `mintlify:navigate`. `replace` defaults to `false`. Root-relative hrefs get the hosting base path only when missing (`/guide` and `/docs/guide` both go to `/docs/guide`). Other origins, paths outside the base path, and calls before the page finishes loading do a full page load. |
 | `window.mintlify.geo`                                     | Observed. `{ country?, region?, continent? } \| undefined` from edge metadata. Missing locally. Not an access-control boundary.                           |
 
-Optional chaining avoids a crash but skips the call; it does not queue it. If timing matters, retry with a bounded readiness check. Server variables are URL inputs, not a channel for tokens.
+`api.playground.setServerVariables` and `clearServerVariables` exist from first paint; calls made before the page is interactive are queued and applied on load. Other properties (`user`, `navigate`) can be undefined early, and optional chaining on them avoids a crash but skips the call without queuing it. If timing matters, retry with a bounded readiness check. Server variables are URL inputs, not a channel for tokens.
 
 ## Events
 
@@ -45,4 +45,4 @@ function onEveryPage(run) {
 - Make setup idempotent. Deduplicate injected third-party script tags and wait for their `load`/`error` events.
 - Do not monkey-patch `history`; listen for `mintlify:navigate` instead.
 
-See the [public documentation](https://www.mintlify.com/docs/customize/custom-scripts).
+See the [public documentation](https://mintlify.com/docs/customize/custom-scripts.md).
