@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "sourceRepository": "mintlify/docs",
   "sourcePath": "agent-context",
-  "sourceCommit": "af39e31f486010b4f13f912a3e413f5ab4d4bf41",
+  "sourceCommit": "d10f6745fcda041154b9a9e04a517b16ff012869",
   "target": "claude"
 }
