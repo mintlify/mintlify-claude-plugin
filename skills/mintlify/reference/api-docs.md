@@ -9,6 +9,7 @@ Spec requirements:
 - `$ref` supports internal references only. External references are not supported.
 - Include a `servers` field with the API base URL. Without it, the playground falls back to simple mode because it can't send requests.
 - Define `components.securitySchemes` and `security` to get auth inputs in the playground.
+- Scopes listed in an operation's `security` requirement render in a Scopes section on the endpoint page and under the selected auth input in the playground, for every security option. OAuth2 scope descriptions come from `flows.*.scopes`, and OpenAPI 3.1 role lists on `apiKey` and `http` requirements render the same way.
 
 Add an `openapi` field to a navigation element (tab, group, anchor, and so on) to generate endpoint pages there. With no `pages`, every endpoint in the spec gets a page:
 
@@ -21,6 +22,7 @@ Add an `openapi` field to a navigation element (tab, group, anchor, and so on) t
 ```
 
 - The value can be a path, a URL, an array of specs, or an object: `{ "source": "openapi.json", "directory": "api-reference" }`. `directory` sets where generated pages live (default `api-reference`).
+- The object form also accepts `slug`: `{ "source": "openapi.json", "directory": "api-reference", "slug": "operationId" }`. `slug` sets which operation field generates endpoint page URLs: `"summary"` (default) or `"operationId"`.
 - To mix endpoints with other pages, set `openapi` on the element and list endpoints in `pages` as `METHOD /path`. Child elements inherit the parent's spec unless they set their own.
 - To pull an endpoint from a specific spec without a default, use `"/path/to/spec.json POST /users"` as the page entry.
 - `api.openapi` in `docs.json` accepts the same values.
@@ -41,7 +43,7 @@ Add an `openapi` field to a navigation element (tab, group, anchor, and so on) t
 In OpenAPI 3.2 documents, tags can declare `parent`, `kind`, and `summary`, which Mintlify uses to build nested navigation groups for auto-populated pages. OpenAPI 3.0 and 3.1 documents keep one flat group per tag, based on each operation's first tag.
 
 - `parent`: Nests the tag's group inside the parent tag's group.
-- `summary`: Sets the group label. If the tag also has `x-group`, `x-group` wins.
+- `summary`: Sets the group label. If the tag also has `x-group` or `x-displayName`, the extension wins (`x-group` first).
 - `kind`: `nav` or unset creates a navigation group. `badge` shows the tag's `summary` (or `name`) as a sidebar pill next to the endpoint and creates no group. Any other value (such as `audience`) creates neither.
 
 ```yaml
@@ -216,9 +218,10 @@ Generate pages from an SDL schema by adding `graphql` to a tab or group in `navi
 ```
 
 - A tab with `graphql` may include `groups` only (no `pages`, `versions`, `languages`) and cannot also have `openapi` or `asyncapi`.
-- By default, Mintlify generates **Queries**, **Mutations**, and **Types** (object, input, enum, interface, union) sections.
+- By default, Mintlify generates **Queries**, **Mutations**, and **Types** (object, input, enum, interface, union, custom scalar) sections.
 - To curate pages, list selectors in `pages` of the tab or group that declares `graphql` (or its nested groups): `QUERY <field>`, `MUTATION <field>`, `TYPE <name>`. Kinds must be uppercase. Dotted paths (`MUTATION cart.createCart`) select namespaced operations; `TYPE` does not accept dotted paths. The sidebar labels a nested operation with its last segment (`createCart`); the page URL keeps the full path (`.../cart/createCart`).
 - If any page is a selector, the full generated sections are skipped. Regular page paths still work alongside selectors. An unmatched selector fails the build.
+- Page URLs use names as written (`.../types/Cart`). When names differ only by case (`StoreFrontConfigType`, `StorefrontConfigType`), the one that sorts first keeps that URL and each other gets a kebab-case URL (`.../types/storefront-config-type`, with a short hash suffix when the kebab-case name is one word or not unique), and the build logs a warning.
 
 ## API settings
 
